@@ -12,7 +12,7 @@ import Form from './Form';
 export default function Home() {
 
   const { toggleTab, toggle } = toggleChange();
-
+  
   const columns = [
     { accessor: 'name', label: 'Name' },
     { accessor: 'address', label: 'Address' },
@@ -22,19 +22,29 @@ export default function Home() {
     { accessor: 'city' , label: 'City'},
     { accessor: 'action' , label: 'Action'},
   ]
-
+  
   const [employees, setEmployees] = useState([]);
-
-  useEffect(() => {
-    setEmployees(getListEmployees());
+  async function fetchData () {
+    console.log("called");
+    const result = await fetch("http://localhost:3000/users", {
+      method: "GET"
+    }).then(async(result) => {
+      
+      const employeeList = await result.json();
+      console.log(employeeList.data);
+      setEmployees(employeeList.data);
+    });
+  }
+  useEffect( () => {
+    fetchData();
+    
 }, []);
-console.log(toggle);
 
   return (
     <div className="App">
       <span className='add-usr'><box-icon type='solid'size='lg' color="blue" name='user-plus' onClick={() => toggleTab()}></box-icon></span>
-      {toggle && <Form toggleTab={toggleTab} setEmployees={setEmployees} />}
-      <Table  rows={employees} setEmployees={setEmployees}  columns={columns} />
+      {toggle && <Form toggleTab={toggleTab} fetchData={fetchData} setEmployees={setEmployees} />}
+      <Table  rows={employees} setEmployees={setEmployees} fetchData={fetchData}  columns={columns} />
     
     </div>
   )

@@ -4,7 +4,7 @@ import { removeEmployee,getListEmployees, getEmployeeById, editEmployee } from '
 import uuid from 'react-uuid';
 import { useForm } from './hooks/useForm';
 
-const Form = ({ toggleTab, id = null, setEmployees }) => {
+const Form = ({ toggleTab, id = null, fetchData, setEmployees }) => {
 
     const { inputValues, handleInputChange, resetForm, setForm } = useForm({
         name: '',
@@ -18,7 +18,14 @@ const Form = ({ toggleTab, id = null, setEmployees }) => {
     useEffect(() => {
         if (id) {
             const employee = getEmployeeById(id);
+            async function fetchEmployee () {
+              const employee1 = (await fetch(`http://localhost:3000/users/${id}`)).json();
+              
+              console.log(employee1.data)
+
+            }
             setForm(employee);
+            fetchEmployee();
   
         }
     }, [id]);
@@ -26,12 +33,23 @@ const Form = ({ toggleTab, id = null, setEmployees }) => {
         e.preventDefault();
         if(id == null) {
             addEmployee({ id: uuid(), ...inputValues});
+            fetch("http://localhost:3000/users", {
+              method: "POST",
+              headers : {
+                "Content-Type" : "application/json",
+              },
+              body : JSON.stringify(inputValues)
+            }).then((res) => {
+              console.log(res);
+            }).catch(function (err) {
+              console.log("Unable to fetch -", err);
+            });
         } else {
             editEmployee(id, inputValues);
             resetForm();
             toggleTab();
         }
-        setEmployees(getListEmployees());
+        fetchData();
         toggleTab();
       };
   return (

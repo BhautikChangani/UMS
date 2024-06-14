@@ -7,7 +7,7 @@ import { removeEmployee } from './service/localstorage';
 import './Table.css'
 import Item from './Item';
 
-export const Table = ({ columns, rows, setEmployees }) => {
+export const Table = ({ columns, rows, setEmployees, fetchData }) => {
 
   const [activePage, setActivePage] = useState(1);
   const [filters, setFilters] = useState({});
@@ -121,7 +121,7 @@ export const Table = ({ columns, rows, setEmployees }) => {
         <tbody>
           {calculatedRows.map((row) => {
             return (
-            <Item row={row} key={row.id} columns={columns} setEmployees={setEmployees}/>
+            <Item row={row} key={row.id} columns={columns} fetchData={fetchData} setEmployees={setEmployees}/>
             )
           })}
         </tbody>

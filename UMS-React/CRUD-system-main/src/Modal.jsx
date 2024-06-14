@@ -1,11 +1,14 @@
 import React from 'react';
 import { removeEmployee,getListEmployees } from './service/localstorage';
 
-const Modal = ({ modalStateHandler, name, id, setEmployees }) => {
+const Modal = ({ modalStateHandler, name, id, setEmployees, fetchData }) => {
+  console.log(id);
     const deleteEmployee = () => {
-        console.log()
-        removeEmployee(id);
-        setEmployees(getListEmployees());
+        fetch(`http://localhost:3000/users/${id}`, {
+          method: "DELETE"
+        })
+        // setEmployees(getListEmployees());
+        fetchData();
         modalStateHandler();
     }
   return (

@@ -5,7 +5,7 @@ import { useState } from 'react';
 import Modal from './Modal';
 
 
-const Item = ({row, columns, setEmployees}) => {
+const Item = ({row, columns, setEmployees, fetchData}) => {
 
     const { toggleTab, toggle } = toggleChange();
     const { id, name, email, address, phone, gender, city } = row;
@@ -31,8 +31,8 @@ const Item = ({row, columns, setEmployees}) => {
                   return <td key={column.accessor}>{row[column.accessor]}</td>
                   }
                 })}
-                { toggle && <Form toggleTab={toggleTab} id={row.id} setEmployees={setEmployees}/>}
-                { isModalOpen && <Modal modalStateHandler={modalStateHandler} id={id} setEmployees={setEmployees} name={name} />}
+                { toggle && <Form toggleTab={toggleTab} id={row.id} fetchData={fetchData} setEmployees={setEmployees}/>}
+                { isModalOpen &&  <Modal modalStateHandler={modalStateHandler} fetchData={fetchData} id={id} setEmployees={setEmployees} name={name} />}
 
             
               </tr>

@@ -18,7 +18,9 @@ const getAllUser = (req, res) => {
         if(error) {
             throw error
         }
-        res.status(200).json(result.rows)
+        res.status(200).json({
+          data: result.rows
+        });
     })
 }
 const getUserById = (request, response) => {
@@ -28,9 +30,10 @@ const getUserById = (request, response) => {
       if (error) {
         throw error
       }
-      console.log(results.rowCount);
       if(results.rowCount > 0){
-          response.status(200).json(results.rows)
+          response.status(200).json({
+            data: results.rows
+          })
       } else {
         response.status(404).json("User not found");
       }
@@ -38,9 +41,9 @@ const getUserById = (request, response) => {
   }
   
   const createUser = (request, response) => {
-    const { name } = request.body
+    const { name, address, email, phone, gender, city } = request.body
   
-    client.query('INSERT INTO users (name) VALUES ($1)', [name], (error, results) => {
+    client.query('INSERT INTO users (name, address, email, phone, gender, city) VALUES ($1, $2, $3, $4, $5, $6)', [name, address, email, phone, gender, city], (error, results) => {
       if (error) {
         throw error
       }
@@ -66,7 +69,7 @@ const getUserById = (request, response) => {
   
   const deleteUser = (request, response) => {
     const id = parseInt(request.params.id)
-  
+  console.log("Hello");
     client.query('DELETE FROM users WHERE id = $1', [id], (error, results) => {
       if (error) {
         throw error
